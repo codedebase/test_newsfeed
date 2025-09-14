@@ -1,0 +1,30 @@
+name: test-daily-news
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # 每 5 分鐘跑一次
+  workflow_dispatch:        # 可以手動觸發
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install feedparser python-dotenv pytz
+
+      - name: Run script
+        env:
+          SMTP_HOST: smtp.gmail.com
+          SMTP_PORT: 587
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+        run: python news_email_agent.py
