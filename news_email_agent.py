@@ -15,6 +15,28 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
+# 用 GPT 總結 headlines（輸入為字串清單）
+def summarize_headlines(headlines):
+    """用 GPT 總結 headlines。若未設定 OPENAI_API_KEY，將回傳提示字串。"""
+    if client is None:
+        return "[摘要略過：未設定 OPENAI_API_KEY]"
+
+    text_block = "\n".join(f"- {h}" for h in headlines)
+    prompt = (
+        "以下是今日的新聞標題，請用中文寫一段100字以內的摘要，讓我快速知道重點：\n"
+        f"{text_block}"
+    )
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=200,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        return f"[摘要失敗: {e}]"
+
 # 你的 RSS feeds
 FEEDS = {
     "WSJ": "https://feeds.content.dowjones.io/public/rss/socialpoliticsfeed",
