@@ -91,7 +91,10 @@ def send_email(subject, html_body):
 def main():
     headlines = fetch_headlines()
     html_body = build_email_body_html(headlines)
-    subject = f"Daily News Headlines — {datetime.now(pytz.timezone('America/New_York')).strftime('%Y-%m-%d')}"
+    # 可選的郵件標題前綴（例如 [TESTING]）
+    prefix = os.getenv("EMAIL_PREFIX", "").strip()
+    base_subject = f"Daily News Headlines — {datetime.now(pytz.timezone('America/New_York')).strftime('%Y-%m-%d')}"
+    subject = f"{prefix} {base_subject}" if prefix else base_subject
     send_email(subject, html_body)
     print("✅ HTML Email 已發送成功！")
     print("以下是今天的 Headlines（debug 用）:")
