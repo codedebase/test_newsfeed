@@ -2,7 +2,7 @@ name: test-daily-news
 
 on:
   schedule:
-    - cron: "*/60 * * * *"   # 每 5 分鐘跑一次
+    - cron: "*/360 * * * *"   # 每 5 分鐘跑一次
   workflow_dispatch:        # 可以手動觸發
 
 jobs:
