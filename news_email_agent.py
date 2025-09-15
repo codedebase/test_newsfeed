@@ -130,6 +130,13 @@ def main():
                 flat_headlines.append(line.strip())
 
     summary = summarize_headlines(flat_headlines) if flat_headlines else None
+    # Debug: 不顯示完整 API Key，只顯示長度與末4碼
+    _k = os.getenv("OPENAI_API_KEY")
+    if _k:
+        print(f"DEBUG OPENAI_API_KEY: set len={len(_k)} last4={_k[-4:]} ")
+    else:
+        print("DEBUG OPENAI_API_KEY: MISSING")
+
     html_body = build_email_body_html(headlines, plain_summary=summary)
     # 可選的郵件標題前綴（例如 [TESTING]）
     prefix = os.getenv("EMAIL_PREFIX", "").strip()
