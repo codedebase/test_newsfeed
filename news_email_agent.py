@@ -1,4 +1,5 @@
 import feedparser
+from openai import OpenAI
 import os
 import smtplib
 from email.mime.text import MIMEText
@@ -9,6 +10,10 @@ import pytz
 
 # 讀 .env 裡的資料
 load_dotenv()
+
+# OpenAI Client（使用新版 SDK）。若未設定 OPENAI_API_KEY，client 將為 None。
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 # 你的 RSS feeds
 FEEDS = {
