@@ -62,7 +62,7 @@ def fetch_headlines():
     return result
 
 # 整理 Email 內容
-def build_email_body_html(headlines_dict):
+def build_email_body_html(headlines_dict, plain_summary=None):
     ny = datetime.now(pytz.timezone("America/New_York"))
     html = f"""
     <html>
@@ -78,6 +78,8 @@ def build_email_body_html(headlines_dict):
     <body>
     <h1>Daily Headlines — New York {ny.strftime('%Y-%m-%d %I:%M %p')}</h1>
     """
+    if plain_summary:
+        html += f"<div class=\"paper\"><h2>📰 今日新聞摘要</h2><div class=\"headline\">{plain_summary}</div></div>\n"
 
     for paper, lines in headlines_dict.items():
         html += f'<div class="paper"><h2>{paper}</h2>'
@@ -117,7 +119,18 @@ def send_email(subject, html_body):
 
 def main():
     headlines = fetch_headlines()
-    html_body = build_email_body_html(headlines)
+    # 將所有 paper 的標題平鋪成一個 list 傳給 GPT 摘要
+    flat_headlines = []
+    for _paper, lines in headlines.items():
+        for line in lines:
+            if "\n" in line:
+                title, _ = line.split("\n", 1)
+                flat_headlines.append(title.replace("- ", "").strip())
+            else:
+                flat_headlines.append(line.strip())
+
+    summary = summarize_headlines(flat_headlines) if flat_headlines else None
+    html_body = build_email_body_html(headlines, plain_summary=summary)
     # 可選的郵件標題前綴（例如 [TESTING]）
     prefix = os.getenv("EMAIL_PREFIX", "").strip()
     base_subject = f"Daily News Headlines — {datetime.now(pytz.timezone('America/New_York')).strftime('%Y-%m-%d')}"
