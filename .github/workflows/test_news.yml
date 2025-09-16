@@ -18,7 +18,9 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install feedparser python-dotenv pytz openai
+        run: |
+          python -m pip install --upgrade pip
+          pip install feedparser python-dotenv pytz openai
 
       - name: Run script
         env:
