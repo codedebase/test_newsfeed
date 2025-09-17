@@ -1,16 +1,18 @@
 name: daily-news
 
-# 排程設定：每天 10:00 UTC → 約紐約時間 6:00AM
+# 排程設定：每天 10:00 UTC → 紐約時間 6:00AM
 on:
   schedule:
     - cron: "0 10 * * *"
+  workflow_dispatch:  # 允許手動觸發，方便測試
 
 jobs:
   send:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -18,7 +20,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install feedparser python-dotenv pytz
+        run: pip install -r requirements.txt
 
       - name: Run script
         env:
