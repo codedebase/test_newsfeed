@@ -16,6 +16,8 @@ def test_open_rss_in_headless_chrome():
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    # 明確指定 Chromium 路徑（CI 安裝 chromium-browser）
+    options.binary_location = os.getenv("CHROME_BIN", "/usr/bin/chromium-browser")
 
     with webdriver.Chrome(options=options) as driver:
         driver.set_page_load_timeout(30)
@@ -34,6 +36,8 @@ def test_full_news_workflow_e2e():
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    # 明確指定 Chromium 路徑（CI 安裝 chromium-browser）
+    options.binary_location = os.getenv("CHROME_BIN", "/usr/bin/chromium-browser")
 
     with webdriver.Chrome(options=options) as driver:
         driver.set_page_load_timeout(30)

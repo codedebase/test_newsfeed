@@ -70,4 +70,5 @@ jobs:
       - name: Run E2E Tests (Selenium)
         env:
           SELENIUM_RUN_E2E: 1
+          CHROME_BIN: /usr/bin/chromium-browser
         run: pytest tests/test_e2e.py -v
