@@ -23,14 +23,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests (smoke only)
+      - name: Run unit tests
         run: |
-          pytest -q tests/ -k "not e2e"
+          pytest -q tests/test_unit.py
+
+      - name: Run integration tests
+        run: |
+          pytest -q tests/test_integration.py
 
       - name: Run E2E tests (manual trigger only)
         if: github.event_name == 'workflow_dispatch'
         run: |
-          SELENIUM_RUN_E2E=1 pytest -q tests/test_rss_feed_selenium.py -k e2e
+          SELENIUM_RUN_E2E=1 pytest -q tests/test_e2e.py
         env:
           # 需要 Chrome 和 chromedriver
           CHROME_BIN: /usr/bin/google-chrome

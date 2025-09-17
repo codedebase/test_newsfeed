@@ -1,6 +1,5 @@
 import builtins
 from unittest import mock
-
 import types
 import os
 
@@ -51,4 +50,3 @@ def test_fetch_headlines_uses_feedparser_parse():
         for lines in data.values():
             assert len(lines) == 3
             assert lines[0].startswith("- ")
-
