@@ -1,6 +1,10 @@
 import os
 import pytest
 from unittest import mock
+import sys
+
+# Ensure project root is on sys.path for CI environments
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 def test_selenium_is_installed_and_importable():

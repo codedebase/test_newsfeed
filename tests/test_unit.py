@@ -2,6 +2,10 @@ import builtins
 from unittest import mock
 import types
 import os
+import sys
+
+# Ensure project root is on sys.path for CI environments
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 def test_summarize_headlines_without_api_key():

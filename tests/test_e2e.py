@@ -1,5 +1,9 @@
 import os
 import pytest
+import sys
+
+# Ensure project root is on sys.path for CI environments
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 @pytest.mark.skipif(os.getenv("SELENIUM_RUN_E2E") != "1", reason="E2E disabled by default")
